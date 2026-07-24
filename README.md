@@ -78,7 +78,7 @@ cp .env.example .env
 Preencha o `.env`:
 
 ```dotenv
-POSTGRES_DBNAME=loja (ou o qualquer outro nome)
+POSTGRES_DBNAME=loja (ou qualquer outro nome)
 POSTGRES_USER=(seu usuário do postgres)
 POSTGRES_PASS=(sua senha da conexão)
 POSTGRES_HOST=db (deve ser db por conta do Docker)
@@ -133,6 +133,8 @@ Resposta esperada:
 ```http
 GET /api/produto/5
 ```
+
+### Listar só um produto
 
 Resposta esperada:
 
