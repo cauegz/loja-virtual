@@ -130,11 +130,11 @@ Resposta esperada:
 ]
 ```
 
+### Listar só um produto
+
 ```http
 GET /api/produto/5
 ```
-
-### Listar só um produto
 
 Resposta esperada:
 

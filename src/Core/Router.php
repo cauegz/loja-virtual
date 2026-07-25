@@ -2,18 +2,22 @@
 
 namespace App\Core;
 
+use App\Util\Request;
+
 class Router
 {
     private array $routes = [];
 
-    public function addRoute(string $url, string $acao): void
+    public function addRoute(string $metodo, string $url, string $acao): void
     {
-        $this->routes[$url] = $acao;
+        $this->routes[$metodo][$url] = $acao;
     }
 
     public function execute(string $url): void
     {
-        foreach ($this->routes as $rota => $acao) {
+        $metodo = Request::method();
+        $rotasMetodo = $this->routes[$metodo] ?? [];
+        foreach ($rotasMetodo as $rota => $acao) {
             $parametros = [];
 
             //procura parâmetros da rota e substitui cada um por um grupo de captura da regex.
