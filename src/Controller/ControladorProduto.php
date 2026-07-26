@@ -6,20 +6,16 @@ use App\DAO\ProdutoDAO;
 use App\Controller\ControladorGeral;
 use App\Model\Produto;
 use App\Util\Request;
-use App\Validator\ProdutoValidator;
+use App\Util\Validator;
 
 class ControladorProduto extends ControladorGeral
 {
     public function getProdutos(){
-        header("Content-Type: application/json");
-
         $dao = new ProdutoDAO();
         echo json_encode($dao->findAll());
     }
 
     public function getProdutoById($id){
-        header("Content-Type: application/json");
-
         $idTratado = filter_var($id, FILTER_VALIDATE_INT);
 
         if(!is_int($idTratado)) exit($this->responseError("informe um número", 400));
@@ -30,11 +26,9 @@ class ControladorProduto extends ControladorGeral
     }
 
     public function criarProduto(){
-        header("Content-Type: application/json");
-
         $dados = Request::body();
         
-        if(!(ProdutoValidator::validar($dados))) exit($this->responseError("campos inválidos", 400));
+        if(!(Validator::validaProduto($dados))) exit($this->responseError("campos inválidos", 400));
 
         $nome = $dados['nome'];
         $preco = $dados['preco'];
@@ -44,5 +38,21 @@ class ControladorProduto extends ControladorGeral
         $dao->insert($produto);
         
         echo $this->responseJSON(["mensagem" => "dados inseridos com sucessor"]);
+    }
+
+    public function editarProduto($id){
+        $dados = Request::body();
+        
+        if(!(Validator::validaProduto($dados))) exit($this->responseError("campos inválidos", 400));
+
+        $nome = $dados['nome'];
+        $preco = $dados['preco'];
+        $descricao = $dados['descricao'];
+        $produto = new Produto($nome, $preco, $descricao);
+        $dao = new ProdutoDAO();
+        $dao->update($produto, $id);
+        //validar se o id existe antes de mandar pro sql, tratar esse id aqui
+
+        echo $this->responseJSON(["mensagem" => "dados atualizados com sucessor"]);
     }
 }

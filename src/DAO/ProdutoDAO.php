@@ -14,6 +14,12 @@ class ProdutoDAO extends BaseDAO{
     }
 
     #[Override]
+    public function getSQLUpdate(): string
+    {
+        return "UPDATE produto SET nome=:nome, preco=:preco, descricao=:descricao WHERE id_produto=:id";
+    }
+
+    #[Override]
     public function getDadosInsert(object $produto): array
     {
         return [
@@ -35,5 +41,16 @@ class ProdutoDAO extends BaseDAO{
     public function getTableName(): string
     {
         return "produto";
+    }
+
+    #[Override]
+    public function getDadosUpdate(object $produto, int $id): array
+    {
+        return [
+            ":id" => $id,
+            ":nome" => $produto->getNome(),
+            ":preco" => $produto->getPreco(),
+            ":descricao" => $produto->getDescricao()
+        ];  
     }
 }

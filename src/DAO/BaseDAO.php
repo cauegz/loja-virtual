@@ -26,6 +26,18 @@ abstract class BaseDAO
         $stmt->execute($dados);
     }
 
+    public function update(object $model, int $id)
+    {
+        $this->validarModel($model);
+
+        $sql = $this->getSQLUpdate();
+        $dados = $this->getDadosUpdate($model, $id);
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute($dados);
+    }
+
     public function findById(int $id)
     {
         $tabela = $this->getTableName();
@@ -45,6 +57,8 @@ abstract class BaseDAO
 
     abstract protected function getTableName(): string;
     abstract protected function getSQLInsert(): string;
+    abstract protected function getSQLUpdate(): string;
     abstract protected function getDadosInsert(object $model): array;
+    abstract protected function getDadosUpdate(object $model, int $id): array;
     abstract protected function validarModel(object $model): void;
 }

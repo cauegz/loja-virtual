@@ -1,8 +1,8 @@
 <?php
-namespace App\Validator;
+namespace App\Util;
 
-class ProdutoValidator{
-    public static function validar(array $produto){
+class Validator{
+    public static function validaProduto(array $produto){
         $nome = trim($produto['nome']) ?? '';
         $preco = str_replace(",", ".", $produto['preco']) ?? null;
         $descricao = trim($produto['descricao']) ?? '';
