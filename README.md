@@ -1,4 +1,4 @@
-# Loja Virtual
+# Sistema de supermercado
 
 Aplicação web full stack para gerenciamento de produtos, usuários, funcionários,
 vendas e avaliações.
@@ -15,7 +15,7 @@ Sistemas do IFRS e, inicialmente, fazia parte do repositório
 
 À medida que novas funcionalidades e conceitos foram adicionados, o exercício
 cresceu e passou a ter um escopo maior do que a atividade original. Por esse
-motivo, ele foi movido para o repositório `loja-virtual` e passou a ser
+motivo, ele foi movido para o repositório `sistema-supermercado` e passou a ser
 desenvolvido como um projeto individual.
 
 Além de aplicar os conteúdos estudados no curso, o projeto serve como espaço
