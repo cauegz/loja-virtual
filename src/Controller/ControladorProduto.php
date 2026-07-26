@@ -16,13 +16,13 @@ class ControladorProduto extends ControladorGeral
     }
 
     public function getProdutoById($id){
-        $idTratado = filter_var($id, FILTER_VALIDATE_INT);
+        $id = Validator::validaInt($id);
 
-        if(!is_int($idTratado)) exit($this->responseError("informe um número", 400));
+        if(!is_int($id)) exit($this->responseError("informe um número", 400));
         
         $dao = new ProdutoDAO();
         
-        echo $this->responseJSON($dao->findById($idTratado));
+        echo $this->responseJSON($dao->findById($id));
     }
 
     public function criarProduto(){
@@ -35,14 +35,17 @@ class ControladorProduto extends ControladorGeral
         $descricao = $dados['descricao'];
         $produto = new Produto($nome, $preco, $descricao);
         $dao = new ProdutoDAO();
-        $dao->insert($produto);
-        
-        echo $this->responseJSON(["mensagem" => "dados inseridos com sucessor"]);
+
+        if($dao->insert($produto)) 
+            echo $this->responseJSON(["mensagem" => "dados inseridos com sucesso"]) ;
+        else 
+            exit($this->responseError("erro ao inserir dados", 500));
     }
 
     public function editarProduto($id){
         $dados = Request::body();
-        
+        $id = Validator::validaInt($id);
+
         if(!(Validator::validaProduto($dados))) exit($this->responseError("campos inválidos", 400));
 
         $nome = $dados['nome'];
@@ -50,9 +53,10 @@ class ControladorProduto extends ControladorGeral
         $descricao = $dados['descricao'];
         $produto = new Produto($nome, $preco, $descricao);
         $dao = new ProdutoDAO();
-        $dao->update($produto, $id);
-        //validar se o id existe antes de mandar pro sql, tratar esse id aqui
 
-        echo $this->responseJSON(["mensagem" => "dados atualizados com sucessor"]);
+        if($dao->update($produto, $id)) 
+            echo $this->responseJSON(["mensagem" => "dados editados com sucesso"]) ;
+        else 
+            exit($this->responseError("erro ao editar dados", 500));
     }
 }

@@ -23,7 +23,7 @@ abstract class BaseDAO
 
         $stmt = $this->pdo->prepare($sql);
 
-        $stmt->execute($dados);
+        return $stmt->execute($dados);
     }
 
     public function update(object $model, int $id)
@@ -35,7 +35,7 @@ abstract class BaseDAO
 
         $stmt = $this->pdo->prepare($sql);
 
-        $stmt->execute($dados);
+        return $stmt->execute($dados);
     }
 
     public function findById(int $id)
