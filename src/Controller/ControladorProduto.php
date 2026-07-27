@@ -28,12 +28,13 @@ class ControladorProduto extends ControladorGeral
         
         if(!(Validator::validaProduto($dados))) exit($this->responseError("campos inválidos", 400));
 
-        $nome = $dados['nome'];
-        $preco = $dados['preco'];
-        $descricao = $dados['descricao'];
-        $produto = new Produto($nome, $preco, $descricao);
-        $dao = new ProdutoDAO();
+        $produto = new Produto(
+            $dados['nome'],
+            $dados['preco'],
+            $dados['descricao']
+        );
 
+        $dao = new ProdutoDAO();
         $dao->insert($produto); 
         echo $this->responseJSON(["mensagem" => "dados inseridos com sucesso"]);
     }

@@ -36,6 +36,17 @@ class ProdutoDAO extends BaseDAO{
     }
 
     #[Override]
+    public function getDadosUpdate(object $produto, int $id): array
+    {
+        return [
+            ":id" => $id,
+            ":nome" => $produto->getNome(),
+            ":preco" => $produto->getPreco(),
+            ":descricao" => $produto->getDescricao()
+        ];  
+    }
+
+    #[Override]
     public function validarModel(object $produto): void
     {
         if(!($produto instanceof Produto)) throw new InvalidArgumentException("
@@ -47,16 +58,5 @@ class ProdutoDAO extends BaseDAO{
     public function getTableName(): string
     {
         return "produto";
-    }
-
-    #[Override]
-    public function getDadosUpdate(object $produto, int $id): array
-    {
-        return [
-            ":id" => $id,
-            ":nome" => $produto->getNome(),
-            ":preco" => $produto->getPreco(),
-            ":descricao" => $produto->getDescricao()
-        ];  
     }
 }

@@ -17,6 +17,7 @@ $router = new Router();
 
 //rotas fixas sempre antes de dinamicas
 $router->addRoute("GET", "/api/produtos", "Produto@getProdutos");
+$router->addRoute("POST", "/api/register", "Auth@register");
 $router->addRoute("POST", "/api/produto", "Produto@criarProduto");
 $router->addRoute("GET", "/api/produto/{id}", "Produto@getProdutoById");
 $router->addRoute("DELETE", "/api/produto/{id}", "Produto@excluirProduto");

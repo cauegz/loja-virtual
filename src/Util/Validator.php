@@ -13,6 +13,27 @@ class Validator{
 
         return true;
     }
+
+    public static function validaRegistro(array $usuario){
+        $nome = trim($usuario['nome']) ?? '';
+        $email = filter_var(trim($usuario['email']), FILTER_SANITIZE_EMAIL) ?? '';
+        $senha = trim($usuario['senha']) ?? '';
+        $cpf = trim($usuario['cpf']) ?? '';
+
+        if(empty($nome) || filter_var($email, FILTER_VALIDATE_EMAIL) || empty($senha) || empty($cpf)) return false;
+
+        return true;
+    }
+
+    public static function validaLogin(array $login){
+        $email = filter_var(trim($login['email']), FILTER_SANITIZE_EMAIL) ?? '';
+        $senha = trim($login['senha']) ?? '';
+
+        if(filter_var($email, FILTER_VALIDATE_EMAIL) || empty($senha)) return false;
+
+        return true;
+    }
+
     public static function validaInt($num){
         $num = filter_var($num, FILTER_VALIDATE_INT);
 
