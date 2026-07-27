@@ -35,7 +35,7 @@ class ControladorProduto extends ControladorGeral
         $dao = new ProdutoDAO();
 
         $dao->insert($produto); 
-        echo $this->responseJSON(["mensagem" => "dados inseridos com sucesso"]) ;
+        echo $this->responseJSON(["mensagem" => "dados inseridos com sucesso"]);
     }
 
     public function editarProduto($id){

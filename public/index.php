@@ -8,9 +8,9 @@ error_reporting(E_ALL);
 
 header("Content-Type: application/json");
 
-require_once __DIR__ . "/vendor/autoload.php";
+require_once __DIR__ . "/../vendor/autoload.php";
 
-$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->safeLoad();
 
 $router = new Router();
@@ -27,14 +27,14 @@ try {
     $router->execute(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 } catch (InvalidArgumentException $th) {
     http_response_code(400);
-    json_encode(["mensagem" => $th]);
+    echo json_encode(["mensagem" => $th->getMessage()]);
 } catch (LogicException $th) {
     http_response_code(409);
-    json_encode(["mensagem" => $th]);
-} catch (\Throwable $th){
-    http_response_code(500);
-    json_encode(["mensagem" => "erro interno"]);
+    echo json_encode(["mensagem" => $th->getMessage()]);
 } catch (PDOException $th){
     http_response_code(500);
-    json_encode(["mensagem" => $th]);
-}
+    echo json_encode(["mensagem" => $th->getMessage()]);
+} catch (\Throwable $th){
+    http_response_code(500);
+    echo json_encode(["mensagem" => "erro interno"]);
+} 
