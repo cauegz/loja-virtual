@@ -38,6 +38,16 @@ abstract class BaseDAO
         return $stmt->execute($dados);
     }
 
+    public function delete(int $id)
+    {
+        $sql = $this->getSQLDelete();
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([":id" => $id]);
+        return $stmt->rowCount() > 0;
+    }
+
     public function findById(int $id)
     {
         $tabela = $this->getTableName();
@@ -58,6 +68,7 @@ abstract class BaseDAO
     abstract protected function getTableName(): string;
     abstract protected function getSQLInsert(): string;
     abstract protected function getSQLUpdate(): string;
+    abstract protected function getSQLDelete(): string;
     abstract protected function getDadosInsert(object $model): array;
     abstract protected function getDadosUpdate(object $model, int $id): array;
     abstract protected function validarModel(object $model): void;

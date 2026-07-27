@@ -20,6 +20,12 @@ class ProdutoDAO extends BaseDAO{
     }
 
     #[Override]
+    public function getSQLDelete(): string
+    {
+        return "DELETE FROM produto WHERE id_produto = :id";
+    }
+
+    #[Override]
     public function getDadosInsert(object $produto): array
     {
         return [

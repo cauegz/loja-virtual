@@ -59,4 +59,13 @@ class ControladorProduto extends ControladorGeral
         else 
             exit($this->responseError("erro ao editar dados", 500));
     }
+
+    public function excluirProduto($id){
+        $id = Validator::validaInt($id);
+        $dao = new ProdutoDAO();
+        if($dao->delete($id)) 
+            echo $this->responseJSON(["mensagem" => "dados exluidos com sucesso"]) ;
+        else 
+            exit($this->responseError("erro ao exluir dados", 500));
+    }
 }
