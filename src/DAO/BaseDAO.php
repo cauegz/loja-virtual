@@ -12,6 +12,7 @@ abstract class BaseDAO
     public function __construct()
     {
         $this->pdo = Conexao::getConnection();
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
     public function insert(object $model)
@@ -23,7 +24,8 @@ abstract class BaseDAO
 
         $stmt = $this->pdo->prepare($sql);
 
-        return $stmt->execute($dados);
+        $stmt->execute($dados);
+        return $stmt->rowCount();
     }
 
     public function update(object $model, int $id)
@@ -35,7 +37,8 @@ abstract class BaseDAO
 
         $stmt = $this->pdo->prepare($sql);
 
-        return $stmt->execute($dados);
+        $stmt->execute($dados);
+        return $stmt->rowCount();
     }
 
     public function delete(int $id)
@@ -45,7 +48,7 @@ abstract class BaseDAO
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute([":id" => $id]);
-        return $stmt->rowCount() > 0;
+        return $stmt->rowCount();
     }
 
     public function findById(int $id)

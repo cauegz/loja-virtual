@@ -12,14 +12,12 @@ class ControladorProduto extends ControladorGeral
 {
     public function getProdutos(){
         $dao = new ProdutoDAO();
-        echo json_encode($dao->findAll());
+        echo $this->responseJSON($dao->findAll());
     }
 
     public function getProdutoById($id){
         $id = Validator::validaInt($id);
 
-        if(!is_int($id)) exit($this->responseError("informe um número", 400));
-        
         $dao = new ProdutoDAO();
         
         echo $this->responseJSON($dao->findById($id));
@@ -36,10 +34,8 @@ class ControladorProduto extends ControladorGeral
         $produto = new Produto($nome, $preco, $descricao);
         $dao = new ProdutoDAO();
 
-        if($dao->insert($produto)) 
-            echo $this->responseJSON(["mensagem" => "dados inseridos com sucesso"]) ;
-        else 
-            exit($this->responseError("erro ao inserir dados", 500));
+        $dao->insert($produto); 
+        echo $this->responseJSON(["mensagem" => "dados inseridos com sucesso"]) ;
     }
 
     public function editarProduto($id){
@@ -48,24 +44,29 @@ class ControladorProduto extends ControladorGeral
 
         if(!(Validator::validaProduto($dados))) exit($this->responseError("campos inválidos", 400));
 
-        $nome = $dados['nome'];
-        $preco = $dados['preco'];
-        $descricao = $dados['descricao'];
-        $produto = new Produto($nome, $preco, $descricao);
+        $produto = new Produto(
+            $dados['nome'],
+            $dados['preco'],
+            $dados['descricao']
+        );
+        
         $dao = new ProdutoDAO();
+        $linhas = $dao->update($produto, $id);
 
-        if($dao->update($produto, $id)) 
+        if($linhas > 0) 
             echo $this->responseJSON(["mensagem" => "dados editados com sucesso"]) ;
-        else 
-            exit($this->responseError("erro ao editar dados", 500));
+        else if($linhas === 0)
+            exit($this->responseError("registro não existe", 404));
     }
 
     public function excluirProduto($id){
         $id = Validator::validaInt($id);
         $dao = new ProdutoDAO();
-        if($dao->delete($id)) 
+        $linhas = $dao->delete($id);
+
+        if($linhas > 0) 
             echo $this->responseJSON(["mensagem" => "dados exluidos com sucesso"]) ;
-        else 
-            exit($this->responseError("erro ao exluir dados", 500));
+        else if($linhas === 0)
+            exit($this->responseError("registro não existe", 404));
     }
 }

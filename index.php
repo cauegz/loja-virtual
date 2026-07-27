@@ -34,4 +34,7 @@ try {
 } catch (\Throwable $th){
     http_response_code(500);
     json_encode(["mensagem" => "erro interno"]);
+} catch (PDOException $th){
+    http_response_code(500);
+    json_encode(["mensagem" => $th]);
 }
