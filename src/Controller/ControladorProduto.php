@@ -31,7 +31,11 @@ class ControladorProduto extends ControladorGeral
         $produto = new Produto(
             $dados['nome'],
             $dados['preco'],
-            $dados['descricao']
+            $dados['descricao'],
+            $dados['codigo_barras'],
+            $dados['estoque_minimo'],
+            $dados['id_marca'],
+            $dados['id_categoria']
         );
 
         $dao = new ProdutoDAO();
@@ -48,7 +52,11 @@ class ControladorProduto extends ControladorGeral
         $produto = new Produto(
             $dados['nome'],
             $dados['preco'],
-            $dados['descricao']
+            $dados['descricao'],
+            $dados['codigo_barras'],
+            $dados['estoque_minimo'],
+            $dados['id_marca'],
+            $dados['id_categoria']
         );
         
         $dao = new ProdutoDAO();
