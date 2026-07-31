@@ -20,7 +20,7 @@ class Validator{
         $senha = trim($usuario['senha']) ?? '';
         $cpf = trim($usuario['cpf']) ?? '';
 
-        if(empty($nome) || filter_var($email, FILTER_VALIDATE_EMAIL) || empty($senha) || empty($cpf)) return false;
+        if(empty($nome) || !filter_var($email, FILTER_VALIDATE_EMAIL) || empty($senha) || empty($cpf)) return false;
 
         return true;
     }

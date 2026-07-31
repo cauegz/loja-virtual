@@ -20,6 +20,9 @@ class ControladorAuth extends ControladorGeral{
         
     }
 
+    /**
+     * Registra um novo funcionário com as credenciais necessárias para utilizar o sistema
+     */
     public function register(){
         $dados = Request::body();
         

@@ -4,112 +4,33 @@ namespace App\Model;
 
 use LogicException;
 
-class Avaliacao{
+class Avaliacao
+{
     private ?int $id = null;
-    private int $nota;
-    private string $comentario;
-    private int $idUsuario;
-    private int $idFuncionario;
 
-    /**
-     * Get the value of comentario
-     */ 
-    public function getComentario()
-    {
-        return $this->comentario;
+    public function __construct(
+        private ?int $nota,
+        private ?string $comentario,
+        private int $idFuncionario,
+        private ?int $idCliente = null
+    ) {
     }
 
-    /**
-     * Set the value of comentario
-     *
-     * @return  self
-     */ 
-    public function setComentario($comentario)
+    public function getId(): ?int { return $this->id; }
+    public function getNota(): ?int { return $this->nota; }
+    public function getComentario(): ?string { return $this->comentario; }
+    public function getIdFuncionario(): int { return $this->idFuncionario; }
+    public function getIdCliente(): ?int { return $this->idCliente; }
+
+    public function setId(int $id): self
     {
-        $this->comentario = $comentario;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of idFuncionario
-     */ 
-    public function getIdFuncionario()
-    {
-        return $this->idFuncionario;
-    }
-
-    /**
-     * Set the value of idFuncionario
-     *
-     * @return  self
-     */ 
-    public function setIdFuncionario($idFuncionario)
-    {
-        $this->idFuncionario = $idFuncionario;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of idUsuario
-     */ 
-    public function getIdUsuario()
-    {
-        return $this->idUsuario;
-    }
-
-    /**
-     * Set the value of idUsuario
-     *
-     * @return  self
-     */ 
-    public function setIdUsuario($idUsuario)
-    {
-        $this->idUsuario = $idUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of nota
-     */ 
-    public function getNota()
-    {
-        return $this->nota;
-    }
-
-    /**
-     * Set the value of nota
-     *
-     * @return  self
-     */ 
-    public function setNota($nota)
-    {
-        $this->nota = $nota;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of id
-     */ 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setId($id)
-    {
-        if($this->id !== null) throw new LogicException("O id já existe", 1);
-
+        if ($this->id !== null) throw new LogicException("O id ja existe");
         $this->id = $id;
-
         return $this;
     }
+
+    public function setNota(?int $nota): self { $this->nota = $nota; return $this; }
+    public function setComentario(?string $comentario): self { $this->comentario = $comentario; return $this; }
+    public function setIdFuncionario(int $idFuncionario): self { $this->idFuncionario = $idFuncionario; return $this; }
+    public function setIdCliente(?int $idCliente): self { $this->idCliente = $idCliente; return $this; }
 }
