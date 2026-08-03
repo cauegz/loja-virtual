@@ -11,7 +11,8 @@ class UsuarioAcesso
     public function __construct(
         private string $email,
         private string $senha,
-        private int $idFuncionario
+        private int $idFuncionario,
+        private int $idPapel
     ) {
     }
 
@@ -19,6 +20,7 @@ class UsuarioAcesso
     public function getEmail(): string { return $this->email; }
     public function getSenha(): string { return $this->senha; }
     public function getIdFuncionario(): int { return $this->idFuncionario; }
+    public function getIdPapel(): int { return $this->idPapel; }
 
     public function setId(int $id): self
     {

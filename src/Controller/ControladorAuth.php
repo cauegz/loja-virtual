@@ -2,10 +2,10 @@
 namespace App\Controller;
 
 use App\Controller\ControladorGeral;
-use App\DAO\UsuarioDAO;
+use App\DAO\UsuarioAcessoDAO;
 use App\Util\Request;
 use App\Util\Validator;
-use App\Model\Usuario;
+use App\Model\UsuarioAcesso;
 
 class ControladorAuth extends ControladorGeral{
     public function login(){
@@ -13,11 +13,19 @@ class ControladorAuth extends ControladorGeral{
 
         if(!(Validator::validaLogin($dados))) exit($this->responseError("campos inválidos", 400));
 
-        $usuario = (new UsuarioDAO())->findByEmail($dados["email"]);
+        $usuarioAcesso = (new UsuarioAcessoDAO())->findByEmail($dados["email"]);
 
-        if(!$usuario || !(password_verify($dados['senha'], $usuario->getSenha()))) exit($this->responseError("credenciais inválidas", 401));
+        if(!$usuarioAcesso || !(password_verify($dados['senha'], $usuarioAcesso->getSenha()))) exit($this->responseError("credenciais inválidas", 401));
 
-        
+        session_regenerate_id(true);
+
+        $_SESSION['id_usuario'] = $usuarioAcesso->getId();
+        $_SESSION['id_funcionario'] = $usuarioAcesso->getIdFuncionario();
+        $_SESSION['id_papel'] = $usuarioAcesso->getIdPapel();
+
+        echo $this->responseJSON([
+            "mensagem" => "login realizado com sucesso"
+        ]);
     }
 
     /**
@@ -28,15 +36,22 @@ class ControladorAuth extends ControladorGeral{
         
         if(!(Validator::validaRegistro($dados))) exit($this->responseError("campos inválidos", 400));
 
-        $usuario = new Usuario(
-            $dados['nome'],
+        $usuarioAcesso = new UsuarioAcesso(
             $dados['email'],
             password_hash($dados['senha'], PASSWORD_DEFAULT),
-            $dados['cpf']
+            $dados['id_funcionario'],
+            $dados['id_papel']
         );
 
-        $dao = new UsuarioDAO;
-        $dao->insert($usuario);
+        $dao = new UsuarioAcessoDAO;
+        $dao->insert($usuarioAcesso);
         echo $this->responseJSON(["mensagem" => "usuário cadastrado com sucesso"]);
+    }
+
+    public function logout(){
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+        echo $this->responseJSON(["mensagem" => "logout realizado com sucesso"]);
     }
 }

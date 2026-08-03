@@ -11,13 +11,13 @@ class UsuarioAcessoDAO extends BaseDAO
     protected function getTableName(): string { return 'usuario_acesso'; }
     protected function getSQLInsert(): string
     {
-        return 'INSERT INTO usuario_acesso (email, senha, id_funcionario)
-                VALUES (:email, :senha, :id_funcionario)';
+        return 'INSERT INTO usuario_acesso (email, senha, id_funcionario, id_papel)
+                VALUES (:email, :senha, :id_funcionario, :id_papel)';
     }
     protected function getSQLUpdate(): string
     {
         return 'UPDATE usuario_acesso SET email = :email, senha = :senha,
-                id_funcionario = :id_funcionario WHERE id_usuario_acesso = :id';
+                id_funcionario = :id_funcionario, id_papel = :id_papel WHERE id_usuario_acesso = :id';
     }
     protected function getSQLDelete(): string
     {
@@ -48,7 +48,8 @@ class UsuarioAcessoDAO extends BaseDAO
         return (new UsuarioAcesso(
             $dados['email'],
             $dados['senha'],
-            (int) $dados['id_funcionario']
+            (int) $dados['id_funcionario'],
+            (int) $dados['id_papel']
         ))->setId((int) $dados['id_usuario_acesso']);
     }
 
@@ -57,7 +58,8 @@ class UsuarioAcessoDAO extends BaseDAO
         return [
             ':email' => $usuario->getEmail(),
             ':senha' => $usuario->getSenha(),
-            ':id_funcionario' => $usuario->getIdFuncionario()
+            ':id_funcionario' => $usuario->getIdFuncionario(),
+            ':id_papel' => $usuario->getIdPapel()
         ];
     }
 }

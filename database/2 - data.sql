@@ -11,13 +11,20 @@ INSERT INTO funcionario (nome, salario, cpf) VALUES
 ('Pedro Santos', 3600.00, '56789012345');
 
 -- ==========================
+-- PAPEL_USUARIO
+-- ==========================
+INSERT INTO papel_usuario (nome) VALUES
+('administrador'),
+('funcionario');
+
+-- ==========================
 -- USUARIO_ACESSO
 -- ==========================
-INSERT INTO usuario_acesso (email, senha, id_funcionario) VALUES
-('joao@mercado.com', '$2y$10$mewHBl5y90y/1M42e9mTF.DVdGrbGe0tD1XFor43ZqjuoaLHaUFnK', 1),
-('maria@mercado.com', '$2y$10$mewHBl5y90y/1M42e9mTF.DVdGrbGe0tD1XFor43ZqjuoaLHaUFnK', 2),
-('carlos@mercado.com', '$2y$10$mewHBl5y90y/1M42e9mTF.DVdGrbGe0tD1XFor43ZqjuoaLHaUFnK', 3),
-('ana@mercado.com', '$2y$10$mewHBl5y90y/1M42e9mTF.DVdGrbGe0tD1XFor43ZqjuoaLHaUFnK', 4);
+INSERT INTO usuario_acesso (email, senha, id_funcionario, id_papel) VALUES
+('joao@mercado.com', '$2y$10$mewHBl5y90y/1M42e9mTF.DVdGrbGe0tD1XFor43ZqjuoaLHaUFnK', 1, 1),
+('maria@mercado.com', '$2y$10$mewHBl5y90y/1M42e9mTF.DVdGrbGe0tD1XFor43ZqjuoaLHaUFnK', 2, 2),
+('carlos@mercado.com', '$2y$10$mewHBl5y90y/1M42e9mTF.DVdGrbGe0tD1XFor43ZqjuoaLHaUFnK', 3, 2),
+('ana@mercado.com', '$2y$10$mewHBl5y90y/1M42e9mTF.DVdGrbGe0tD1XFor43ZqjuoaLHaUFnK', 4, 2);
 
 -- ==========================
 -- CLIENTE

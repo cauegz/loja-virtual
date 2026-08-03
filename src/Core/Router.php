@@ -3,21 +3,29 @@
 namespace App\Core;
 
 use App\Util\Request;
+use LogicException;
 
 class Router
 {
     private array $routes = [];
 
-    public function addRoute(string $metodo, string $url, string $acao): void
-    {
-        $this->routes[$metodo][$url] = $acao;
+    public function addRoute(
+        string $metodo,
+        string $url,
+        string $acao,
+        array $middlewares = []
+    ): void {
+        $this->routes[$metodo][$url] = [
+            'acao' => $acao,
+            'middlewares' => $middlewares
+        ];
     }
 
     public function execute(string $url): void
     {
         $metodo = Request::method();
         $rotasMetodo = $this->routes[$metodo] ?? [];
-        foreach ($rotasMetodo as $rota => $acao) {
+        foreach ($rotasMetodo as $rota => $configuracao) {
             $parametros = [];
 
             //procura parâmetros da rota e substitui cada um por um grupo de captura da regex.
@@ -42,33 +50,50 @@ class Router
             //remove a url e deixa só os parâmetros no array valores
             array_shift($valores);
 
-            [$nomeControlador, $funcao] = explode("@", $acao, 2);
-
-            $controlador = "App\\Controller\\Controlador"
-                . $nomeControlador;
-
-            if (!class_exists($controlador)) {
-                http_response_code(404);
-                exit("Erro 404: classe não existe");
-            }
-
-            $instance = new $controlador();
-
-            if (!is_callable([$instance, $funcao])) {
-                http_response_code(404);
-                exit("Erro 404: método não existe");
-            }
-
-            $resultado = $instance->$funcao(...$valores);
-
-            if ($resultado !== null) {
-                echo $resultado;
-            }
+            $this->executarMiddlewares($configuracao['middlewares']);
+            $this->executarControlador($configuracao['acao'], $valores);
 
             return;
         }
 
         http_response_code(404);
-        exit("Erro 404: rota não encontrada");
+        exit(json_encode(["mensagem" => "rota não encontrada"]));
+    }
+
+    private function executarMiddlewares(array $middlewares): void
+    {
+        foreach ($middlewares as $middleware) {
+            if (!is_callable($middleware)) {
+                throw new LogicException("middleware inválido");
+            }
+
+            $middleware();
+        }
+    }
+
+    private function executarControlador(string $acao, array $parametros): void
+    {
+        [$nomeControlador, $funcao] = explode("@", $acao, 2);
+
+        $controlador = "App\\Controller\\Controlador"
+            . $nomeControlador;
+
+        if (!class_exists($controlador)) {
+            http_response_code(404);
+            exit(json_encode(["mensagem" => "controlador não encontrado"]));
+        }
+
+        $instance = new $controlador();
+
+        if (!is_callable([$instance, $funcao])) {
+            http_response_code(404);
+            exit(json_encode(["mensagem" => "método do controlador não encontrado"]));
+        }
+
+        $resultado = $instance->$funcao(...$parametros);
+
+        if ($resultado !== null) {
+            echo $resultado;
+        }
     }
 }

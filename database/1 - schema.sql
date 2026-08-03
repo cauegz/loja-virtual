@@ -61,6 +61,13 @@ CREATE TABLE marca
   PRIMARY KEY (id_marca)
 );
 
+CREATE TABLE papel_usuario
+(
+  id_papel INT          NOT NULL GENERATED ALWAYS AS IDENTITY,
+  nome     VARCHAR(100) NOT NULL UNIQUE,
+  PRIMARY KEY (id_papel)
+);
+
 CREATE TABLE produto
 (
   id_produto     INT           NOT NULL GENERATED ALWAYS AS IDENTITY,
@@ -87,9 +94,10 @@ CREATE TABLE produto_fornecedor
 CREATE TABLE usuario_acesso
 (
   id_usuario_acesso INT          NOT NULL GENERATED ALWAYS AS IDENTITY,
+  id_papel          INT          NOT NULL,
+  id_funcionario    INT          NOT NULL UNIQUE,
   email             VARCHAR(150) NOT NULL UNIQUE,
   senha             VARCHAR(255) NOT NULL,
-  id_funcionario    INT          NOT NULL,
   PRIMARY KEY (id_usuario_acesso)
 );
 
@@ -157,3 +165,8 @@ ALTER TABLE usuario_acesso
   ADD CONSTRAINT FK_funcionario_TO_usuario_acesso
     FOREIGN KEY (id_funcionario)
     REFERENCES funcionario (id_funcionario);
+
+ALTER TABLE usuario_acesso
+  ADD CONSTRAINT FK_papel_usuario_TO_usuario_acesso
+    FOREIGN KEY (id_papel)
+    REFERENCES papel_usuario (id_papel);
